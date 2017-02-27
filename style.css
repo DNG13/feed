@@ -1,0 +1,10 @@
+body{
+    margin: 20px;
+}
+/*table*/
+tr, th, td{
+    border: 1px solid;
+}
+thead{
+    background: bisque;
+}
