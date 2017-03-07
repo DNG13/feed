@@ -1,18 +1,18 @@
 <?php
 
-session_start();
-include_once'lib/db_connect.php';
+include_once 'lib/flash_messages.php';
+include_once 'lib/db_queries.php';
+
 $id = $_GET['id'];
 if(!empty($id)) {
-    $query = "DELETE FROM posts WHERE id=$id";
-    $result = mysqli_query($connect, $query);
-    if (!$result) {
-        print_r(mysqli_error_list($connect));
+    if (!delete_records('posts', 'id', $id)) {
+        set_flash_message('message', get_message(2));
     } else {
-        $_SESSION['message'] = 'Baш пост видалено.';
-        return header('Location:/');
+        //delete all comments to the post
+        delete_records('comments', 'post_id', $id);
+        set_flash_message('message', get_message(3, 'пост'));
     }
 }else{
-    $_SESSION['message'] = 'Введіть коректний id.';
-    return header('Location:/');
+    set_flash_message('message', get_message(4));
 }
+header('Location:/');

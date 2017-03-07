@@ -1,6 +1,10 @@
 <?php
-session_start();
-include_once'lib/db_connect.php';
+
+ini_set("display_errors",1);
+error_reporting(E_ALL);
+
+include_once 'lib/flash_messages.php';
+include_once 'lib/db_queries.php';
 
 ?>
 <html>
@@ -12,9 +16,7 @@ include_once'lib/db_connect.php';
         <link rel="stylesheet" type="text/css" href="assets/styles.css">
     </head>
     <body>
-    <?php
-    if(!empty($_SESSION['message'])) echo $_SESSION['message'];
-    ?>
+    <?php echo show_flash_message('message'); ?>
         <table class="table">
             <thead>
                 <tr>
@@ -28,8 +30,7 @@ include_once'lib/db_connect.php';
             </thead>
             <tbody>
             <?php
-            $query = mysqli_query($connect, 'SELECT * FROM posts ');
-            while ($post = mysqli_fetch_object($query)){
+            foreach (select_records('posts') as $post){
                 echo"<tr>";
                 echo '<td>', $post->id, '</td>';
                 echo '<td>', $post->title, '</td>';

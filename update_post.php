@@ -1,17 +1,16 @@
 <?php
-session_start();
 
-require_once 'lib/db_connect.php';
+include_once 'lib/flash_messages.php';
+include_once 'lib/db_queries.php';
 
 $id = $_GET['id'];
 $title = $_POST['title'];
 $description = $_POST['description'];
 
-$query = "UPDATE posts SET title='$title', description='$description' WHERE id=$id";
-$result = mysqli_query($connect, $query);
+$result = update_record('posts', $id, 'title', $title, 'description', $description);
 if(!$result){
-        print_r(mysqli_error_list($connect));
-    }else{
-        $_SESSION['message'] = "Ваш пост '$title' оновлено!";
-        return header('Location:/');
+    set_flash_message('message', get_message(6, 'посту'));
+}else{
+    set_flash_message('message', get_message(7, 'пост', $title));
  }
+header('Location:/');
