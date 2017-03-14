@@ -6,8 +6,13 @@ include_once '../lib/db_queries.php';
 $post_id = $_SESSION['post_id'];
 $id = $_GET['id'];
 $content = $_POST['content'];
+$data = [
+    'post_id' => $post_id,
+    'id' => $id,
+    'content' => $content
+];
 
-$result = update_record('comments', $id, 'content', $content);
+$result = update_record('comments', $data, 'id');
 if(!$result){
     set_flash_message('message', get_message(6, 'коментаря'));
 }else{

@@ -26,30 +26,40 @@ function select_records(
 
 function delete_records($table_name, $field, $params){
     global $connect;
-    $query_string = "DELETE FROM $table_name WHERE $field=$params";
+    if (empty($params)) return false;
+    $query_string = "DELETE FROM $table_name WHERE $field = $params";
     return mysqli_query($connect, $query_string);
 }
 
-function create_record($table_name, $field1, $field2, $value1, $value2){
+function create_record($table_name, $params){
     global $connect;
-    $query_string = "INSERT INTO $table_name ($field1, $field2) VALUES ('$value1', '$value2')";
+    if (empty($params)) return false;
+    $query_string = "INSERT INTO $table_name";
+    $fields ='(' . implode(', ', array_keys($params)) .')';
+    $values = ' VALUES ' .  '(' . implode(', ', array_map(
+        function ($value)use ($connect){
+            return "'". mysqli_real_escape_string($connect, $value)."'";
+        }, $params)) .')';
+    $query_string .= $fields . $values;
     return mysqli_query($connect, $query_string);
 }
 
-function update_record(
-    $table_name,
-    $params,
-    $field1,
-    $value1,
-    $field2=false,
-    $value2=false)
-{
+
+function update_record($table_name, $params, $field_name){
     global $connect;
-    $query_string = "UPDATE $table_name SET $field1='$value1' ";
-    if($field2 && $value2) {
-        $query_string .= ", $field2='$value2'";
-    }
-    $query_string .= " WHERE id=$params";
-    var_dump( $query_string);
-    return mysqli_query($connect, $query_string);
+    $force_id = null;
+    if(!empty($params) && !empty($field_name) && array_key_exists($field_name, $params)){
+        $force_id = $params[$field_name];
+        unset($params[$field_name]);
+        $query_string = "UPDATE $table_name SET ";;
+        array_walk($params, function(&$value, $key) use ($connect, $query_string){
+            $value = "$key = '" . mysqli_real_escape_string($connect, $value) . "'";
+        });
+        $query_string.= implode($params, ', ');
+        if(!empty($force_id)){
+            $field_value = mysqli_real_escape_string($connect, $force_id);
+            $query_string .=  " WHERE $field_name = $field_value";
+        }
+        return mysqli_query($connect, $query_string);
+    }else return false;
 }

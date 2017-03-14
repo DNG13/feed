@@ -14,7 +14,11 @@ function show_flash_message($key){
     return $message;
 }
 
-function get_message($i, $type_text, $title=false)
+function flash_exists($key){
+    return !empty($_SESSION[$key]);
+}
+
+function get_message($i, $type_text=false, $title=false)
 {
     $messages = [
         "Baш $type_text '$title' збережено!",

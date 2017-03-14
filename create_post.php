@@ -5,7 +5,12 @@ include_once 'lib/db_queries.php';
 
 $title = $_POST['title'];
 $description = $_POST['description'];
-$result = create_record('posts', 'title', 'description', $title, $description);
+$data = [
+    'title'=> $title,
+    'description' => $description,
+];
+
+$result = create_record('posts', $data);
 if(!$result){
     set_flash_message('message', get_message(1, 'посту'));
 }else{

@@ -15,13 +15,21 @@ $_SESSION['post_id']= $_GET['id'];
         <link rel="stylesheet" type="text/css" href="assets/styles.css">
     </head>
     <body>
-        <div class="comment">
-            <div><a class="btn btn-primary"  href="/"><i class='glyphicon glyphicon-home'></i> Посилання на головну.</a></div>
+        <div class="comment form-horizontal col-md-4 col-md-offset-3">
+            <div><a class="btn btn-primary"  href="/">
+                    <i class='glyphicon glyphicon-home'></i>
+                    Посилання на головну.</a>
+            </div>
+            <?php if(flash_exists('message')):?>
+                <div class="alert alert-info">
+                    <?php echo show_flash_message('message'); ?>
+                </div>
+            <?php endif?>
             <?php
-            echo show_flash_message('message');
             if($post = select_records('posts', 'id', $_GET['id'], true)) {
-                echo '<h2>', $post->title, '</h2>';
-                echo '<h4>', $post->description, '</h4>';
+                echo '<h2>Загаловок: ', $post->title, '</h2>';
+                echo '<h3>Текст: ', $post->description, '</h4>';
+                echo '<h4>Коментарі:</h4>';
                 echo "<ol>";
                 foreach (select_records('comments', 'post_id', $_GET['id']) as $comment){
                     echo '<li>' . $comment->content ;

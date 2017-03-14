@@ -16,7 +16,11 @@ include_once 'lib/db_queries.php';
         <link rel="stylesheet" type="text/css" href="assets/styles.css">
     </head>
     <body>
-    <?php echo show_flash_message('message'); ?>
+        <?php if(flash_exists('message')):?>
+            <div class="alert alert-warning col-md-offset">
+                <?php echo show_flash_message('message'); ?>
+            </div>
+        <?php endif?>
         <table class="table">
             <thead>
                 <tr>

@@ -5,9 +5,13 @@ include_once '../lib/db_queries.php';
 
 $post_id = $_SESSION['post_id'];
 $content = $_POST['content'];
+$data = [
+    'post_id'=> $post_id,
+    'content' => $content,
+];
 
 if(!empty($post_id)) {
-    $result = create_record('comments', 'content', 'post_id', $content, $post_id);
+    $result = create_record('comments', $data);
     if (!$result) {
         set_flash_message('message', get_message(1, 'коментаря'));
     } else {
