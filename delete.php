@@ -1,7 +1,10 @@
 <?php
 
+require_once  'lib/auth_check.php';
 include_once 'lib/flash_messages.php';
 include_once 'lib/db_queries.php';
+
+check_user_auth();
 
 $id = $_GET['id'];
 if(!empty($id)) {
@@ -15,4 +18,4 @@ if(!empty($id)) {
 }else{
     set_flash_message('message', get_message(4));
 }
-header('Location:/');
+return header('Location:/');

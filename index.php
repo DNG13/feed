@@ -1,11 +1,8 @@
 <?php
 
-ini_set("display_errors",1);
-error_reporting(E_ALL);
-
+require_once 'lib/auth_check.php';
 include_once 'lib/flash_messages.php';
 include_once 'lib/db_queries.php';
-
 ?>
 <html>
     <head>
@@ -28,8 +25,10 @@ include_once 'lib/db_queries.php';
                     <th>Заголовок</th>
                     <th>Опис</th>
                     <th>Посилання</th>
+                    <?php if(user_exists()): ?>
                     <th>Видалити</th>
                     <th>Редагувати</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -40,13 +39,20 @@ include_once 'lib/db_queries.php';
                 echo '<td>', $post->title, '</td>';
                 echo '<td>', $post->description, '</td>';
                 echo '<td>', "<a href='/show.php?id=$post->id'>Читати більше...</a>", '</td>';
-                echo '<td>', "<a href='/delete.php?id=$post->id'>Видалити</a>", '</td>';
-                echo '<td>', "<a href='/edit_post.php?id=$post->id'>Редагувати</a>", '</td>';
+                if(user_exists()) {
+                    echo '<td>', "<a href='/delete.php?id=$post->id'>Видалити</a>", '</td>';
+                    echo '<td>', "<a href='/edit_post.php?id=$post->id'>Редагувати</a>", '</td>';
+                }
                 echo"</tr>";
             }
             ?>
             </tbody>
         </table>
-    <a class="btn btn-warning" href="/new_post.php">Створити новий пост.</a>
+        <?php if(user_exists()): ?>
+        <a class="btn btn-warning" href="/new_post.php">Створити новий пост</a>
+            <a class="btn btn-warning" href="/login/user_auth_delete.php">Вихід</a>
+        <?php else: ?>
+            <a class="btn btn-danger" href="/login/user_auth.php">Вхід</a>
+        <?php endif; ?>
     </body>
 </html>

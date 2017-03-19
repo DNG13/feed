@@ -1,10 +1,10 @@
 <?php
 
-ini_set("display_errors",1);
-error_reporting(E_ALL);
-
 include_once '../lib/flash_messages.php';
 include_once '../lib/db_queries.php';
+require_once  '../lib/auth_check.php';
+
+redirect_if_user_auth();
 
 ?>
 <html>

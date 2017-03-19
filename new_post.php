@@ -1,4 +1,11 @@
-<?php require_once 'forms/post_form.php'; ?>
+<?php
+
+require_once 'forms/post_form.php';
+require_once  'lib/auth_check.php';
+require_once 'lib/uploader.php';
+
+check_user_auth();
+?>
 <html>
     <head>
         <title>

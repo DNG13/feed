@@ -8,3 +8,6 @@ tr, th, td{
 thead{
     background: orange;
 }
+img{
+    height: 300px;
+}
