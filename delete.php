@@ -1,8 +1,9 @@
 <?php
 
-require_once  'lib/auth_check.php';
+require_once 'lib/auth_check.php';
 include_once 'lib/flash_messages.php';
 include_once 'lib/db_queries.php';
+require_once 'lib/uploader.php';
 
 check_user_auth();
 
@@ -13,6 +14,10 @@ if(!empty($id)) {
     } else {
         //delete all comments to the post
         delete_records('comments', 'post_id', $id);
+
+        //delete dir with picture
+        $target_dir="./upload/posts/$id/";
+        delete_dir($target_dir);
         set_flash_message('message', get_message(3, 'пост'));
     }
 }else{
